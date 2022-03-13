@@ -1,27 +1,41 @@
 //Module 3
 //Robot Gladiators Game
 
+var fightOrSkip = function() {
+    //ask player if they'd like to fight or skip
+    var promptFight = window.prompt('Would you like to FIGHT or SKIP this round? Enter "FIGHT" or "SKIP" to choose.');
 
+    //conditional recursive function call 
+    if(promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        return fightOrSkip();
+    }
+
+    promptFight = promptFight.toLowerCase();
+
+    //if player picks skip, confirm and stop the loop
+    if(promptFight === "skip") {
+        //confirm player wants to skip 
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+        //if yes (true), leave fight
+        if(confirmSkip) {
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            //subtract money from playerMoney for skipping
+            playerInfo.money = Math.max(0, playerInfo.money - 10);
+            //return true if player wants to leave 
+            return true;
+        }
+    }
+    return false;
+}
 
 //fight function
 var fight = function(enemy) {
     while(enemy.health > 0 && playerInfo.health > 0) {
         //Alert the players that they are starting the round
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose.");
-        
-        //if player choses to skip
-        if (promptFight === "skip" || promptFight === "SKIP") {
-        //confirm player wants to skip
-        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-
-            //if yes (true), leave fight 
-            if (confirmSkip) {
-                window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-                //subtract money from playerInfo.money for skipping
-                playerInfo.money = Math.max(0, playerInfo.money - 10);
-                console.log("playerInfo.money", playerInfo.money);
-                break;
-            }
+        if(fightOrSkip()) {
+            //if true, leave fight by breaking the loop 
+            break;
         }
 
         //remove enemy's health by subtracting the amount set in the playerInfo.attack variable
